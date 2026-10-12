@@ -1,0 +1,1294 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Misi Pakar Insurans Kenderaan SPM</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 50%, #0f172a 100%);
+            color: #f8fafc;
+            min-height: 100vh;
+        }
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.8);
+            backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        .glass-card {
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        .glow-btn {
+            transition: all 0.25s ease;
+            box-shadow: 0 0 15px rgba(99, 102, 241, 0.3);
+        }
+        .glow-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 0 25px rgba(99, 102, 241, 0.6);
+        }
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(15, 23, 42, 0.6);
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #3b82f6;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="p-3 md:p-6 flex flex-col justify-between min-h-screen">
+
+    <!-- Top Header -->
+    <header class="max-w-6xl mx-auto w-full mb-6">
+        <div class="glass-panel rounded-2xl p-4 flex flex-wrap items-center justify-between gap-4 shadow-2xl">
+            <div class="flex items-center space-x-3">
+                <div class="w-12 h-12 bg-gradient-to-tr from-indigo-500 via-purple-500 to-pink-500 rounded-xl flex items-center justify-center text-2xl shadow-lg">
+                    <i class="fa-solid font-bold fa-car-shield text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl md:text-2xl font-extrabold bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-sky-300 to-pink-300">
+                        PAKAR INSURANS SPM
+                    </h1>
+                    <p class="text-xs text-slate-400">Sistem Latihan & Rekod Penguasaan Matematik SPM</p>
+                </div>
+            </div>
+
+            <!-- Header Action Tools -->
+            <div class="flex flex-wrap items-center gap-2 md:gap-3">
+                <button onclick="openSheetsConfigModal()" class="px-3 py-2 bg-emerald-950/80 hover:bg-emerald-900 text-emerald-300 border border-emerald-500/40 rounded-xl text-xs md:text-sm font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-file-excel text-emerald-400"></i> Integrasi Google Sheet
+                </button>
+                <button onclick="openTariffModal()" class="px-3 py-2 bg-indigo-900/60 hover:bg-indigo-800 text-indigo-200 border border-indigo-500/30 rounded-xl text-xs md:text-sm font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-table-cells text-indigo-400"></i> Jadual Tarif
+                </button>
+                <button onclick="openFormulaModal()" class="px-3 py-2 bg-purple-900/60 hover:bg-purple-800 text-purple-200 border border-purple-500/30 rounded-xl text-xs md:text-sm font-semibold transition flex items-center gap-1.5">
+                    <i class="fa-solid fa-calculator text-purple-400"></i> Formula
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content Container -->
+    <main class="max-w-6xl mx-auto w-full flex-grow flex flex-col justify-center">
+
+        <!-- SCREEN 1: WELCOME / LOG IN FORM -->
+        <div id="screen-welcome" class="glass-panel rounded-3xl p-6 md:p-10 shadow-2xl text-center max-w-3xl mx-auto my-auto transition-all">
+            <div class="inline-block p-4 bg-indigo-500/10 rounded-full mb-4 border border-indigo-500/20">
+                <i class="fa-solid fa-award text-5xl text-indigo-400 animate-bounce"></i>
+            </div>
+            <h2 class="text-2xl md:text-4xl font-extrabold mb-2 text-white">Log Masuk Pelajar</h2>
+            <p class="text-slate-300 text-sm md:text-base mb-6 max-w-xl mx-auto">
+                Sila masukkan <span class="text-amber-400 font-bold">Nama</span> & <span class="text-cyan-400 font-bold">Kelas</span> anda untuk memulakan cabaran 5 set soalan insurans motor SPM.
+            </p>
+
+            <!-- Player Input Form -->
+            <div class="space-y-4 max-w-md mx-auto text-left mb-8">
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1 uppercase tracking-wider">Nama Penuh Pelajar</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-user absolute left-4 top-3.5 text-slate-400"></i>
+                        <input type="text" id="player-name" placeholder="Contoh: Muhammad Amir" 
+                            class="w-full pl-11 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <div>
+                    <label class="block text-xs font-semibold text-slate-300 mb-1 uppercase tracking-wider">Kelas</label>
+                    <div class="relative">
+                        <i class="fa-solid fa-school absolute left-4 top-3.5 text-slate-400"></i>
+                        <input type="text" id="player-class" placeholder="Contoh: 5 Alfa / 5 Cemerlang" 
+                            class="w-full pl-11 pr-4 py-3 bg-slate-900/90 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Previous Login History Quick Select -->
+                <div id="quick-history-box" class="hidden bg-slate-900/60 p-3 rounded-xl border border-slate-700 text-xs text-slate-300 space-y-2">
+                    <div class="font-bold text-indigo-300 flex justify-between items-center">
+                        <span><i class="fa-solid fa-history"></i> Rekod Log Masuk Terdahulu:</span>
+                        <span id="history-count" class="text-amber-400 font-mono">0 Percubaan</span>
+                    </div>
+                    <div id="quick-history-list" class="flex flex-wrap gap-2 max-h-24 overflow-y-auto pt-1">
+                        <!-- Dynamic items -->
+                    </div>
+                </div>
+
+                <div class="bg-indigo-950/40 p-4 rounded-xl border border-indigo-800/40 text-xs space-y-1.5 text-slate-300">
+                    <div class="font-bold text-indigo-300 text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-circle-check"></i> Nota Penggunaan:
+                    </div>
+                    <p>• Anda boleh log masuk berulang kali untuk mempertingkatkan markah.</p>
+                    <p>• Keputusan percubaan anda akan direkodkan dalam graf statistik kelas di akhir aktiviti.</p>
+                </div>
+            </div>
+
+            <button onclick="startGame()" class="glow-btn px-8 py-4 bg-gradient-to-r from-indigo-500 via-purple-600 to-pink-600 text-white font-bold rounded-2xl text-lg shadow-xl w-full max-w-md">
+                Mula Misi & Cabaran <i class="fa-solid fa-play ml-2"></i>
+            </button>
+        </div>
+
+        <!-- SCREEN 2: GAMEPLAY QUIZ ARENA -->
+        <div id="screen-game" class="hidden space-y-6">
+            
+            <!-- Progress & Score Bar -->
+            <div class="glass-panel p-4 rounded-2xl flex flex-wrap justify-between items-center gap-4">
+                <div class="flex items-center space-x-4">
+                    <div class="text-xs uppercase tracking-wider text-slate-400 font-semibold">
+                        <span id="lbl-student-info" class="text-indigo-300 font-bold">Pelajar</span>
+                    </div>
+                    <div class="flex items-center space-x-1" id="progress-dots">
+                        <!-- Dynamic dots injected by JS -->
+                    </div>
+                </div>
+
+                <div class="flex items-center space-x-6 text-sm">
+                    <div>
+                        <span class="text-slate-400 text-xs block">Soalan</span>
+                        <span class="font-extrabold text-indigo-300 text-base" id="lbl-question-num">1 / 5</span>
+                    </div>
+                    <div>
+                        <span class="text-slate-400 text-xs block">Jumlah Markah</span>
+                        <span class="font-extrabold text-amber-400 text-base" id="lbl-total-score">0</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Level Selector -->
+            <div id="level-selection-panel" class="glass-panel p-6 rounded-3xl text-center space-y-4">
+                <h3 class="text-xl font-bold text-white">Pilih Tahap Soalan SPM <span id="current-q-step-text">#1</span></h3>
+                <p class="text-slate-300 text-sm">Pilih tahap kesusahan soalan yang ingin dicuba:</p>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-2">
+                    <button onclick="selectLevel('rendah')" class="glass-card hover:bg-slate-800/80 p-5 rounded-2xl border-2 border-emerald-500/30 hover:border-emerald-500 text-left transition group">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="px-2.5 py-1 bg-emerald-500/20 text-emerald-300 text-xs font-bold rounded-lg border border-emerald-500/30">RENDAH</span>
+                            <span class="text-amber-400 font-extrabold text-sm"><i class="fa-solid fa-star"></i> 3 Markah</span>
+                        </div>
+                        <h4 class="font-bold text-white text-base group-hover:text-emerald-300 transition">Asas 3 Step Straightforward</h4>
+                        <p class="text-xs text-slate-400 mt-1">Satu kenderaan, pengiraan terus kadar dari jadual.</p>
+                    </button>
+
+                    <button onclick="selectLevel('sederhana')" class="glass-card hover:bg-slate-800/80 p-5 rounded-2xl border-2 border-sky-500/30 hover:border-sky-500 text-left transition group">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="px-2.5 py-1 bg-sky-500/20 text-sky-300 text-xs font-bold rounded-lg border border-sky-500/30">SEDERHANA</span>
+                            <span class="text-amber-400 font-extrabold text-sm"><i class="fa-solid fa-star"></i> 5 Markah</span>
+                        </div>
+                        <h4 class="font-bold text-white text-base group-hover:text-sky-300 transition">Standard Format SPM</h4>
+                        <p class="text-xs text-slate-400 mt-1">Variasi lokasi Semenanjung vs Sabah/Sarawak & Pihak Ketiga Kebakaran/Kecurian.</p>
+                    </button>
+
+                    <button onclick="selectLevel('power')" class="glass-card hover:bg-slate-800/80 p-5 rounded-2xl border-2 border-pink-500/30 hover:border-pink-500 text-left transition group">
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="px-2.5 py-1 bg-pink-500/20 text-pink-300 text-xs font-bold rounded-lg border border-pink-500/30">POWER 🔥</span>
+                            <span class="text-amber-400 font-extrabold text-sm"><i class="fa-solid fa-star"></i> 7 Markah</span>
+                        </div>
+                        <h4 class="font-bold text-white text-base group-hover:text-pink-300 transition">Cabaran KBAT / Perbandingan</h4>
+                        <p class="text-xs text-slate-400 mt-1">Gabungan perbezaan kadar & pertukaran lokasi wilayah.</p>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Active Question Workspace -->
+            <div id="question-workspace" class="hidden grid grid-cols-1 lg:grid-cols-12 gap-6">
+                <!-- Left Column -->
+                <div class="lg:col-span-5 space-y-4">
+                    <div class="glass-panel p-6 rounded-3xl border-l-4 border-l-indigo-500 space-y-4">
+                        <div class="flex items-center justify-between">
+                            <span id="q-source-tag" class="px-3 py-1 bg-indigo-500/20 text-indigo-300 text-xs font-bold rounded-full border border-indigo-500/30">
+                                Percubaan SPM 2026
+                            </span>
+                            <span id="q-marks-tag" class="text-xs font-extrabold text-amber-400 bg-amber-400/10 px-3 py-1 rounded-full border border-amber-400/20">
+                                5 Markah
+                            </span>
+                        </div>
+
+                        <div>
+                            <h3 id="q-title" class="text-lg font-bold text-white">Soalan Insurans Motor</h3>
+                            <p id="q-description" class="text-sm text-slate-200 leading-relaxed mt-2">
+                                Loading scenario...
+                            </p>
+                        </div>
+
+                        <!-- Data Cards -->
+                        <div class="bg-slate-900/80 rounded-2xl p-4 border border-slate-700/60 text-xs space-y-2 shadow-inner">
+                            <div class="font-bold text-indigo-400 text-xs uppercase tracking-wider mb-2 border-b border-slate-800 pb-1">
+                                <i class="fa-solid fa-circle-info"></i> Maklumat Kenderaan & Polis
+                            </div>
+                            <div class="flex justify-between"><span class="text-slate-400">Pemilik / Kenderaan:</span> <span class="font-bold text-white" id="info-owner">-</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Kapasiti Enjin (cc):</span> <span class="font-bold text-cyan-300" id="info-cc">-</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Nilai Diinsuranskan:</span> <span class="font-bold text-amber-300" id="info-value">-</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Lokasi Kenderaan:</span> <span class="font-bold text-white" id="info-location">-</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Kadar NCD:</span> <span class="font-bold text-emerald-400" id="info-ncd">-</span></div>
+                            <div class="flex justify-between"><span class="text-slate-400">Jenis Insurans:</span> <span class="font-bold text-pink-300" id="info-type">-</span></div>
+                        </div>
+
+                        <div class="bg-indigo-950/40 p-3.5 rounded-xl border border-indigo-800/30 text-xs flex justify-between items-center">
+                            <div>
+                                <span class="text-slate-400 block">Kadar Asas Tarif Motor (RM1,000 Pertama):</span>
+                                <span class="text-amber-300 font-bold text-sm" id="info-base-rate-hint">RM 0.00</span>
+                            </div>
+                            <button onclick="openTariffModal()" class="text-indigo-400 hover:text-indigo-200 underline text-xs">
+                                Semak Jadual
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right Column: Step Inputs -->
+                <div class="lg:col-span-7 space-y-4">
+                    <div class="glass-panel p-6 rounded-3xl space-y-5">
+                        <div class="border-b border-slate-700/60 pb-3 flex justify-between items-center">
+                            <h3 class="font-extrabold text-lg text-white flex items-center gap-2">
+                                <i class="fa-solid fa-pen-to-square text-indigo-400"></i> Borang Jawapan 3 Langkah
+                            </h3>
+                            <span class="text-xs text-slate-400">Isi nilai wang (RM) tepat 2 tempat perpuluhan</span>
+                        </div>
+
+                        <!-- STEP 1 INPUT -->
+                        <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-700/80 space-y-2">
+                            <div class="flex justify-between items-center">
+                                <label class="text-xs font-bold text-indigo-300 uppercase tracking-wider flex items-center gap-2">
+                                    <span class="w-6 h-6 bg-indigo-500 text-white rounded-full flex items-center justify-center text-xs">1</span>
+                                    Step 1: Kiraan Premium Asas (RM)
+                                </label>
+                                <button type="button" onclick="toggleHint(1)" class="text-slate-400 hover:text-amber-300 text-xs transition">
+                                    <i class="fa-regular fa-lightbulb"></i> Formula Step 1
+                                </button>
+                            </div>
+                            <p id="hint-step1" class="hidden text-xs text-indigo-200 bg-indigo-950/60 p-2.5 rounded-lg border border-indigo-800/50">
+                                <strong>Formula:</strong> <span id="formula-step1-desc">Kadar Asas + [(Nilai Insurans - 1000)/1000] × Kadar Wilayah</span>
+                            </p>
+                            <div class="relative">
+                                <span class="absolute left-4 top-3 text-slate-400 text-sm font-bold">RM</span>
+                                <input type="number" step="0.01" id="ans-step1" placeholder="0.00" 
+                                    class="w-full pl-12 pr-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono text-base focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- STEP 2 INPUT -->
+                        <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-700/80 space-y-2">
+                            <div class="flex justify-between items-center">
+                                <label class="text-xs font-bold text-emerald-300 uppercase tracking-wider flex items-center gap-2">
+                                    <span class="w-6 h-6 bg-emerald-500 text-white rounded-full flex items-center justify-center text-xs">2</span>
+                                    Step 2: Kiraan Diskaun NCD (RM)
+                                </label>
+                                <button type="button" onclick="toggleHint(2)" class="text-slate-400 hover:text-amber-300 text-xs transition">
+                                    <i class="fa-regular fa-lightbulb"></i> Formula Step 2
+                                </button>
+                            </div>
+                            <p id="hint-step2" class="hidden text-xs text-emerald-200 bg-emerald-950/60 p-2.5 rounded-lg border border-emerald-800/50">
+                                <strong>Formula NCD:</strong> (Peratus NCD ÷ 100) × Premium Asas [Jawapan Step 1]
+                            </p>
+                            <div class="relative">
+                                <span class="absolute left-4 top-3 text-slate-400 text-sm font-bold">RM</span>
+                                <input type="number" step="0.01" id="ans-step2" placeholder="0.00" 
+                                    class="w-full pl-12 pr-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono text-base focus:ring-2 focus:ring-emerald-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <!-- STEP 3 INPUT -->
+                        <div class="bg-slate-900/60 p-4 rounded-2xl border border-slate-700/80 space-y-2">
+                            <div class="flex justify-between items-center">
+                                <label class="text-xs font-bold text-pink-300 uppercase tracking-wider flex items-center gap-2">
+                                    <span class="w-6 h-6 bg-pink-500 text-white rounded-full flex items-center justify-center text-xs">3</span>
+                                    Step 3: Kiraan Premium Kasar Akhir (RM)
+                                </label>
+                                <button type="button" onclick="toggleHint(3)" class="text-slate-400 hover:text-amber-300 text-xs transition">
+                                    <i class="fa-regular fa-lightbulb"></i> Formula Step 3
+                                </button>
+                            </div>
+                            <p id="hint-step3" class="hidden text-xs text-pink-200 bg-pink-950/60 p-2.5 rounded-lg border border-pink-800/50">
+                                <strong>Formula Premium Kasar:</strong> Premium Asas (Step 1) - Diskaun NCD (Step 2)
+                            </p>
+                            <div class="relative">
+                                <span class="absolute left-4 top-3 text-slate-400 text-sm font-bold">RM</span>
+                                <input type="number" step="0.01" id="ans-step3" placeholder="0.00" 
+                                    class="w-full pl-12 pr-4 py-2.5 bg-slate-950 border border-slate-700 rounded-xl text-white font-mono text-base focus:ring-2 focus:ring-pink-500 focus:outline-none">
+                            </div>
+                        </div>
+
+                        <div class="pt-2">
+                            <button onclick="submitAnswer()" class="glow-btn w-full py-3.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-bold rounded-2xl text-base shadow-lg transition">
+                                <i class="fa-solid fa-check-circle mr-2"></i> Semak Jawapan Saya
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Feedback Card -->
+            <div id="result-feedback-card" class="hidden glass-panel p-6 rounded-3xl space-y-5 animate-fade-in border-2">
+                <div id="feedback-header" class="flex items-center space-x-3 pb-3 border-b border-slate-700"></div>
+                <div id="feedback-breakdown" class="space-y-3 text-sm"></div>
+                <div class="flex justify-end pt-2">
+                    <button id="btn-next-question" onclick="nextQuestion()" class="glow-btn px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold rounded-xl text-sm">
+                        Teruskan ke Soalan Seterusnya <i class="fa-solid fa-arrow-right ml-2"></i>
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- SCREEN 3: SUMMARY, CHARTS & CLASS LEADERBOARD -->
+        <div id="screen-results" class="hidden glass-panel rounded-3xl p-6 md:p-8 space-y-8 max-w-5xl mx-auto my-4">
+            
+            <div class="text-center space-y-2">
+                <div class="inline-block p-3 bg-amber-500/10 rounded-full border border-amber-500/30 mb-1">
+                    <i class="fa-solid fa-trophy text-5xl text-amber-400 animate-bounce"></i>
+                </div>
+                <h2 class="text-2xl md:text-4xl font-extrabold text-white">Tahniah! Misi Selesai 🎉</h2>
+                <p class="text-slate-300 text-sm">Hasil keputusan & data latihan telah berjaya direkodkan.</p>
+            </div>
+
+            <!-- Score Summary Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div class="glass-card p-5 rounded-2xl border border-amber-500/30 text-center space-y-1">
+                    <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Markah Sesi Ini</span>
+                    <div class="text-3xl font-black text-amber-400" id="final-score-display">0 / 0</div>
+                    <div class="text-xs font-bold text-emerald-300" id="final-grade-badge">Pakar Utama Insurans</div>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-indigo-500/30 text-center space-y-1">
+                    <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Maklumat Pelajar</span>
+                    <div class="text-lg font-bold text-white truncate" id="summary-student-name">-</div>
+                    <div class="text-xs font-semibold text-indigo-300" id="summary-student-class">-</div>
+                </div>
+
+                <div class="glass-card p-5 rounded-2xl border border-emerald-500/30 text-center space-y-1">
+                    <span class="text-slate-400 text-xs font-bold uppercase tracking-wider">Status Google Sheet</span>
+                    <div class="text-sm font-bold text-emerald-400 flex items-center justify-center gap-2 pt-1" id="sheet-sync-status">
+                        <i class="fa-solid fa-cloud-arrow-up"></i> Menyimpan...
+                    </div>
+                    <p class="text-[10px] text-slate-400">Tersimpan secara automatik</p>
+                </div>
+            </div>
+
+            <!-- CHARTS SECTION -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+                <!-- Chart 1: Student Attempt Progression -->
+                <div class="glass-card p-5 rounded-2xl space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-chart-line text-indigo-400"></i> Rekod Markah Mengikut Percubaan
+                        </h4>
+                        <span class="text-[10px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded">Pelajar Ini</span>
+                    </div>
+                    <div class="relative h-56">
+                        <canvas id="studentProgressionChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- Chart 2: Class Performance Distribution -->
+                <div class="glass-card p-5 rounded-2xl space-y-3">
+                    <div class="flex justify-between items-center">
+                        <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                            <i class="fa-solid fa-chart-pie text-emerald-400"></i> Taburan Penguasaan Keseluruhan Pengguna
+                        </h4>
+                        <span class="text-[10px] text-slate-400 bg-slate-800 px-2 py-0.5 rounded">Semua Kelas</span>
+                    </div>
+                    <div class="relative h-56 flex justify-center">
+                        <canvas id="classDistributionChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- LEADERBOARD / RECORDS TABLE -->
+            <div class="glass-card p-5 rounded-2xl space-y-4">
+                <div class="flex flex-wrap justify-between items-center gap-2 border-b border-slate-700/80 pb-3">
+                    <h4 class="font-bold text-white text-sm flex items-center gap-2">
+                        <i class="fa-solid fa-list-ol text-amber-400"></i> Senarai Keputusan Semua Pelajar & Percubaan
+                    </h4>
+                    <button onclick="clearLocalRecords()" class="text-[11px] text-rose-400 hover:text-rose-300 underline">
+                        Padam Rekod Tempatan
+                    </button>
+                </div>
+
+                <div class="overflow-x-auto max-h-60 overflow-y-auto">
+                    <table class="w-full text-xs text-left text-slate-300">
+                        <thead class="bg-slate-900/90 text-slate-400 uppercase font-bold sticky top-0 border-b border-slate-700">
+                            <tr>
+                                <th class="p-2.5">#</th>
+                                <th class="p-2.5">Nama Pelajar</th>
+                                <th class="p-2.5">Kelas</th>
+                                <th class="p-2.5">Percubaan</th>
+                                <th class="p-2.5">Markah</th>
+                                <th class="p-2.5">Peratus</th>
+                                <th class="p-2.5">Tarikh / Masa</th>
+                            </tr>
+                        </thead>
+                        <tbody id="all-records-table-body" class="divide-y divide-slate-800">
+                            <!-- Injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- ACTION BUTTONS -->
+            <div class="pt-2 flex flex-col sm:flex-row justify-center gap-4">
+                <button onclick="restartGame()" class="glow-btn px-6 py-3.5 bg-gradient-to-r from-indigo-500 to-purple-600 text-white font-bold rounded-xl text-sm">
+                    <i class="fa-solid fa-rotate-right mr-2"></i> Log Masuk / Cuba Sekali Lagi
+                </button>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MODAL 1: TARIFF TABLE MODAL -->
+    <div id="tariff-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-panel max-w-4xl w-full max-h-[90vh] rounded-3xl p-6 overflow-y-auto space-y-4 border border-indigo-500/30">
+            <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-table text-indigo-400"></i> Jadual Kadar Tarif Motor 1511 (Semenanjung & Sabah/Sarawak)
+                </h3>
+                <button onclick="closeTariffModal()" class="text-slate-400 hover:text-white text-xl font-bold">&times;</button>
+            </div>
+
+            <div class="overflow-x-auto">
+                <table class="w-full text-xs text-slate-200 border border-slate-700/80 rounded-xl overflow-hidden">
+                    <thead class="bg-indigo-950/80 text-indigo-200 uppercase font-bold text-center border-b border-slate-700">
+                        <tr>
+                            <th class="p-2.5 border-r border-slate-700" rowspan="2">Kapasiti Enjin (cc) tidak melebihi</th>
+                            <th class="p-2.5 border-r border-slate-700" colspan="2">Semenanjung Malaysia (RM)</th>
+                            <th class="p-2.5" colspan="2">Sabah & Sarawak (RM)</th>
+                        </tr>
+                        <tr class="bg-indigo-900/50">
+                            <th class="p-2 border-r border-slate-700">Komprehensif</th>
+                            <th class="p-2 border-r border-slate-700">Pihak Ketiga</th>
+                            <th class="p-2 border-r border-slate-700">Komprehensif</th>
+                            <th class="p-2">Pihak Ketiga</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y divide-slate-800 text-center font-mono">
+                        <tr class="hover:bg-slate-800/40"><td class="p-2 font-sans font-semibold border-r border-slate-800 text-left">1,400 cc</td><td class="p-2 border-r border-slate-800 text-cyan-300">273.80</td><td class="p-2 border-r border-slate-800">120.00</td><td class="p-2 border-r border-slate-800 text-cyan-300">196.20</td><td class="p-2">67.50</td></tr>
+                        <tr class="hover:bg-slate-800/40"><td class="p-2 font-sans font-semibold border-r border-slate-800 text-left">1,650 cc</td><td class="p-2 border-r border-slate-800 text-cyan-300">305.50</td><td class="p-2 border-r border-slate-800">135.00</td><td class="p-2 border-r border-slate-800 text-cyan-300">220.00</td><td class="p-2">75.60</td></tr>
+                        <tr class="hover:bg-slate-800/40"><td class="p-2 font-sans font-semibold border-r border-slate-800 text-left">2,200 cc</td><td class="p-2 border-r border-slate-800 text-cyan-300">339.10</td><td class="p-2 border-r border-slate-800">151.20</td><td class="p-2 border-r border-slate-800 text-cyan-300">243.90</td><td class="p-2">85.20</td></tr>
+                        <tr class="hover:bg-slate-800/40"><td class="p-2 font-sans font-semibold border-r border-slate-800 text-left">3,050 cc</td><td class="p-2 border-r border-slate-800 text-cyan-300">372.60</td><td class="p-2 border-r border-slate-800">167.40</td><td class="p-2 border-r border-slate-800 text-cyan-300">267.80</td><td class="p-2">93.60</td></tr>
+                        <tr class="hover:bg-slate-800/40"><td class="p-2 font-sans font-semibold border-r border-slate-800 text-left">4,100 cc</td><td class="p-2 border-r border-slate-800 text-cyan-300">406.20</td><td class="p-2 border-r border-slate-800">183.60</td><td class="p-2 border-r border-slate-800 text-cyan-300">291.70</td><td class="p-2">101.70</td></tr>
+                        <tr class="hover:bg-slate-800/40"><td class="p-2 font-sans font-semibold border-r border-slate-800 text-left">> 4,100 cc</td><td class="p-2 border-r border-slate-800 text-cyan-300">439.70</td><td class="p-2 border-r border-slate-800">199.80</td><td class="p-2 border-r border-slate-800 text-cyan-300">315.60</td><td class="p-2">109.80</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="bg-amber-950/40 p-3 rounded-xl border border-amber-700/40 text-xs text-amber-200">
+                <strong>Kadar Baki setiap RM1,000 melebihi RM1,000 pertama:</strong><br>
+                • Semenanjung Malaysia: <strong>RM 26.00</strong> | • Sabah & Sarawak: <strong>RM 20.30</strong>
+            </div>
+
+            <div class="text-right">
+                <button onclick="closeTariffModal()" class="px-5 py-2 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs">
+                    Tutup Jadual
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: FORMULA REFERENCE MODAL -->
+    <div id="formula-modal" class="hidden fixed inset-0 bg-black/80 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-panel max-w-2xl w-full rounded-3xl p-6 space-y-4 border border-emerald-500/30">
+            <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-graduation-cap text-emerald-400"></i> Panduan 3 Step Insurans Motor SPM
+                </h3>
+                <button onclick="closeFormulaModal()" class="text-slate-400 hover:text-white text-xl font-bold">&times;</button>
+            </div>
+
+            <div class="space-y-3 text-xs text-slate-300">
+                <div class="bg-slate-900 p-3.5 rounded-xl border border-indigo-500/30">
+                    <h4 class="font-bold text-indigo-300 text-sm mb-1">STEP 1: Kiraan Premium Asas</h4>
+                    <ul class="list-disc list-inside space-y-1">
+                        <li><strong>Komprehensif:</strong><br><code>Kadar Tarif RM1,000 Pertama + [(Nilai Insurans - 1000) / 1000] × (RM26.00 / RM20.30)</code></li>
+                        <li><strong>Pihak Ketiga, Kebakaran & Kecurian:</strong><br><code>0.75 × Premium Asas Komprehensif</code></li>
+                        <li><strong>Pihak Ketiga:</strong><br><code>Kadar Tetap dari Jadual Tarif</code></li>
+                    </ul>
+                </div>
+                <div class="bg-slate-900 p-3.5 rounded-xl border border-emerald-500/30">
+                    <h4 class="font-bold text-emerald-300 text-sm mb-1">STEP 2: Kiraan Diskaun NCD</h4>
+                    <p><code>NCD (RM) = (Peratus NCD / 100) × Premium Asas (Hasil Step 1)</code></p>
+                </div>
+                <div class="bg-slate-900 p-3.5 rounded-xl border border-pink-500/30">
+                    <h4 class="font-bold text-pink-300 text-sm mb-1">STEP 3: Kiraan Premium Kasar</h4>
+                    <p><code>Premium Kasar (RM) = Premium Asas (Step 1) - Diskaun NCD (Step 2)</code></p>
+                </div>
+            </div>
+
+            <div class="text-right">
+                <button onclick="closeFormulaModal()" class="px-5 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-bold rounded-xl text-xs">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: GOOGLE SHEETS CONFIG & APPS SCRIPT INSTRUCTIONS -->
+    <div id="sheets-modal" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-50 flex items-center justify-center p-4">
+        <div class="glass-panel max-w-2xl w-full max-h-[90vh] rounded-3xl p-6 overflow-y-auto space-y-4 border border-emerald-500/40">
+            <div class="flex justify-between items-center border-b border-slate-700 pb-3">
+                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                    <i class="fa-solid fa-file-excel text-emerald-400"></i> Tetapan Google Sheets (Google Apps Script)
+                </h3>
+                <button onclick="closeSheetsConfigModal()" class="text-slate-400 hover:text-white text-xl font-bold">&times;</button>
+            </div>
+
+            <p class="text-xs text-slate-300">
+                Masukkan URL Web App Google Apps Script anda untuk menghantar rekod markah pelajar secara automatik ke Google Sheet guru.
+            </p>
+
+            <div class="space-y-2">
+                <label class="block text-xs font-bold text-emerald-300 uppercase tracking-wider">Google Apps Script Web App URL:</label>
+                <input type="url" id="sheets-web-url" placeholder="https://script.google.com/macros/s/.../exec"
+                    class="w-full p-3 bg-slate-950 border border-slate-700 rounded-xl text-xs font-mono text-white focus:outline-none focus:ring-2 focus:ring-emerald-500">
+                <button onclick="saveSheetsUrl()" class="px-4 py-2 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold rounded-xl">
+                    Simpan URL
+                </button>
+            </div>
+
+            <!-- Kod Google Apps Script untuk Guru -->
+            <div class="bg-slate-900 p-4 rounded-xl border border-slate-800 space-y-2">
+                <div class="flex justify-between items-center">
+                    <span class="text-xs font-bold text-amber-300"><i class="fa-solid fa-code"></i> Kod Google Apps Script (Salin ke Extensions > Apps Script dalam Sheet anda):</span>
+                    <button onclick="copyAppsScript()" class="text-[11px] bg-slate-800 hover:bg-slate-700 text-slate-200 px-2.5 py-1 rounded">
+                        <i class="fa-regular fa-copy"></i> Salin Kod
+                    </button>
+                </div>
+                <pre class="text-[10px] font-mono bg-slate-950 p-3 rounded-lg text-emerald-300 overflow-x-auto" id="script-code-block">
+function doPost(e) {
+  try {
+    var sheet = SpreadsheetApp.getActiveSpreadsheet().getActiveSheet();
+    var data = JSON.parse(e.postData.contents);
+    
+    sheet.appendRow([
+      new Date(),
+      data.nama,
+      data.kelas,
+      data.cubaan,
+      data.markah,
+      data.markahMaksimum,
+      data.peratus + '%',
+      data.gred
+    ]);
+    
+    return ContentService.createTextOutput(JSON.stringify({"result": "success"}))
+      .setMimeType(ContentService.MimeType.JSON);
+  } catch(err) {
+    return ContentService.createTextOutput(JSON.stringify({"result": "error", "error": err.toString()}))
+      .setMimeType(ContentService.MimeType.JSON);
+  }
+}</pre>
+            </div>
+
+            <div class="text-right">
+                <button onclick="closeSheetsConfigModal()" class="px-5 py-2 bg-slate-700 hover:bg-slate-600 text-white text-xs font-bold rounded-xl">
+                    Tutup
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* MOTOR TARIFF LOOKUP TABLE DATA */
+        const MOTOR_TARIFF = [
+            { maxCc: 1400, semComp: 273.80, semTp: 120.00, ssComp: 196.20, ssTp: 67.50 },
+            { maxCc: 1650, semComp: 305.50, semTp: 135.00, ssComp: 220.00, ssTp: 75.60 },
+            { maxCc: 2200, semComp: 339.10, semTp: 151.20, ssComp: 243.90, ssTp: 85.20 },
+            { maxCc: 3050, semComp: 372.60, semTp: 167.40, ssComp: 267.80, ssTp: 93.60 },
+            { maxCc: 4100, semComp: 406.20, semTp: 183.60, ssComp: 291.70, ssTp: 101.70 },
+            { maxCc: 99999, semComp: 439.70, semTp: 199.80, ssComp: 315.60, ssTp: 109.80 }
+        ];
+
+        /* QUESTION BANK */
+        const QUESTION_BANK = {
+            rendah: [
+                {
+                    source: "Soalan SPM 2022 (Terubahsuai)",
+                    title: "Kiraan Insurans Komprehensif Asas",
+                    owner: "Encik Farhan",
+                    car: "Proton Saga (1332 cc)",
+                    cc: 1332,
+                    insuredValue: 35000,
+                    location: "Semenanjung Malaysia",
+                    isSemenanjung: true,
+                    ncd: 25,
+                    policyType: "Komprehensif",
+                    desc: "Encik Farhan ingin membeli polis insurans Komprehensif untuk keretanya di Semenanjung Malaysia dengan nilai yang diinsuranskan RM35,000. Beliau layak mendapat NCD 25%."
+                },
+                {
+                    source: "Percubaan SPM Selangor 2026",
+                    title: "Insurans Pihak Ketiga Sahaja",
+                    owner: "Puan Ranjitha",
+                    car: "Perodua Myvi (1496 cc)",
+                    cc: 1496,
+                    insuredValue: 28000,
+                    location: "Semenanjung Malaysia",
+                    isSemenanjung: true,
+                    ncd: 30,
+                    policyType: "Pihak Ketiga",
+                    desc: "Puan Ranjitha berhasrat mengambil polis insurans Pihak Ketiga bagi keretanya. Berapakah premium kasar yang perlu dibayar jika NCD beliau ialah 30%?"
+                },
+                {
+                    source: "Soalan SPM 2023",
+                    title: "Polis Komprehensif Sabah",
+                    owner: "Encik Justin",
+                    car: "Toyota Vios (1496 cc)",
+                    cc: 1496,
+                    insuredValue: 50000,
+                    location: "Sabah & Sarawak",
+                    isSemenanjung: false,
+                    ncd: 55,
+                    policyType: "Komprehensif",
+                    desc: "Encik Justin menetap di Kuching, Sarawak. Beliau menginsuranskan keretanya bernilai RM50,000 bawah polis Komprehensif dengan NCD maksimum 55%."
+                }
+            ],
+            sederhana: [
+                {
+                    source: "Percubaan SPM Johor 2026",
+                    title: "Pihak Ketiga, Kebakaran & Kecurian",
+                    owner: "Puan Hafizah",
+                    car: "Honda Civic (1799 cc)",
+                    cc: 1799,
+                    insuredValue: 70000,
+                    location: "Semenanjung Malaysia",
+                    isSemenanjung: true,
+                    ncd: 33.33,
+                    policyType: "Pihak Ketiga, Kebakaran dan Kecurian",
+                    desc: "Puan Hafizah ingin menginsuranskan keretanya dengan polis Pihak Ketiga, Kebakaran dan Kecurian. Hitung premium kasar yang perlu dibayar jika kadar NCD beliau ialah 33.33%."
+                },
+                {
+                    source: "Soalan SPM 2024",
+                    title: "Polis Komprehensif Kapasiti Enjin Tinggi",
+                    owner: "Encik Alex Wong",
+                    car: "Mazda CX-5 (2488 cc)",
+                    cc: 2488,
+                    insuredValue: 95000,
+                    location: "Semenanjung Malaysia",
+                    isSemenanjung: true,
+                    ncd: 45,
+                    policyType: "Komprehensif",
+                    desc: "Encik Alex menginsuranskan kenderaan SUV bernilai RM95,000. Kirakan Premium Asas, diskaun NCD 45% dan Premium Kasar yang dikenakan."
+                },
+                {
+                    source: "Percubaan SPM Kedah 2026",
+                    title: "Kebakaran & Kecurian di Sabah",
+                    owner: "Encik Dayang",
+                    car: "Nissan Serena (1997 cc)",
+                    cc: 1997,
+                    insuredValue: 60000,
+                    location: "Sabah & Sarawak",
+                    isSemenanjung: false,
+                    ncd: 20,
+                    policyType: "Pihak Ketiga, Kebakaran dan Kecurian",
+                    desc: "Encik Dayang berada di Kota Kinabalu. Beliau memilih polis Pihak Ketiga, Kebakaran dan Kecurian untuk MPV beliau. Diberi NCD 20%."
+                }
+            ],
+            power: [
+                {
+                    source: "Percubaan SPM Kelantan 2026 (KBAT)",
+                    title: "Perbandingan Kadar Komprehensif Wilayah",
+                    owner: "Encik Ramesh",
+                    car: "Proton X70 (1799 cc)",
+                    cc: 1799,
+                    insuredValue: 80000,
+                    location: "Semenanjung Malaysia",
+                    isSemenanjung: true,
+                    ncd: 55,
+                    policyType: "Komprehensif",
+                    desc: "Encik Ramesh memindahkan lokasi pendaftaran kenderaannya dari Miri, Sarawak ke Ipoh, Perak. Kirakan premium kasar terkini di Semenanjung Malaysia (NCD 55%)."
+                },
+                {
+                    source: "Soalan SPM 2025 (KBAT)",
+                    title: "Penjimatan Polis Kebakaran & Kecurian",
+                    owner: "Datin Salmah",
+                    car: "Toyota Camry (2494 cc)",
+                    cc: 2494,
+                    insuredValue: 120000,
+                    location: "Semenanjung Malaysia",
+                    isSemenanjung: true,
+                    ncd: 30,
+                    policyType: "Pihak Ketiga, Kebakaran dan Kecurian",
+                    desc: "Datin Salmah menukar pilihan polis dari Komprehensif kepada Pihak Ketiga, Kebakaran dan Kecurian bagi kereta 2494 cc beliau dengan NCD 30%. Selesaikan pengiraan 3 step untuk polis pilihan baharunya."
+                }
+            ]
+        };
+
+        /* GAME STATE */
+        let gameState = {
+            playerName: "",
+            playerClass: "",
+            attemptNumber: 1,
+            currentQuestionIdx: 0,
+            totalScore: 0,
+            questionHistory: [],
+            currentQuestionData: null,
+            currentLevel: null,
+            maxMarksForCurrent: 0
+        };
+
+        /* DEFAULT GOOGLE SHEETS WEB APP URL */
+        const DEFAULT_SHEETS_URL = "https://script.google.com/macros/s/AKfycbwjDOJ_KccS7Muu-y72FhXomlCS7igbdpD3mX85L1BiQqMxQ_SVZlRvfaeACy2mTcyT/exec";
+
+        let chartInstances = {};
+
+        // Load previous records from localStorage on init
+        window.onload = function() {
+            updateQuickHistoryUI();
+            const savedUrl = localStorage.getItem("spm_sheets_url") || DEFAULT_SHEETS_URL;
+            document.getElementById("sheets-web-url").value = savedUrl;
+        };
+
+        function getStoredRecords() {
+            return JSON.parse(localStorage.getItem("spm_insurans_all_records") || "[]");
+        }
+
+        function saveRecordLocally(record) {
+            const records = getStoredRecords();
+            records.unshift(record); // top newest
+            localStorage.setItem("spm_insurans_all_records", JSON.stringify(records));
+        }
+
+        function updateQuickHistoryUI() {
+            const records = getStoredRecords();
+            const box = document.getElementById("quick-history-box");
+            const list = document.getElementById("quick-history-list");
+            const countLabel = document.getElementById("history-count");
+
+            if (records.length === 0) {
+                box.classList.add("hidden");
+                return;
+            }
+
+            box.classList.remove("hidden");
+            countLabel.innerText = `${records.length} Rekod Tersimpan`;
+            list.innerHTML = "";
+
+            // Unique students
+            const seen = new Set();
+            records.forEach(r => {
+                const key = `${r.nama.toLowerCase()}_${r.kelas.toLowerCase()}`;
+                if (!seen.has(key)) {
+                    seen.add(key);
+                    const btn = document.createElement("button");
+                    btn.className = "px-2.5 py-1 bg-slate-800 hover:bg-indigo-900/80 text-indigo-300 rounded-lg text-[11px] font-medium border border-indigo-500/30 transition";
+                    btn.innerHTML = `<i class="fa-solid fa-user-check mr-1"></i> ${r.nama} (${r.kelas})`;
+                    btn.onclick = () => {
+                        document.getElementById("player-name").value = r.nama;
+                        document.getElementById("player-class").value = r.kelas;
+                    };
+                    list.appendChild(btn);
+                }
+            });
+        }
+
+        function calculateInsurance(cc, insuredValue, isSemenanjung, ncdPercent, policyType) {
+            const tariff = MOTOR_TARIFF.find(t => cc <= t.maxCc) || MOTOR_TARIFF[MOTOR_TARIFF.length - 1];
+            let baseRate = 0;
+            let step1BasePremium = 0;
+            const ratePer1000Extra = isSemenanjung ? 26.00 : 20.30;
+
+            if (policyType === "Komprehensif") {
+                baseRate = isSemenanjung ? tariff.semComp : tariff.ssComp;
+                const balanceValue = Math.max(0, insuredValue - 1000);
+                step1BasePremium = baseRate + ((balanceValue / 1000) * ratePer1000Extra);
+            } else if (policyType === "Pihak Ketiga, Kebakaran dan Kecurian") {
+                const compBaseRate = isSemenanjung ? tariff.semComp : tariff.ssComp;
+                const balanceValue = Math.max(0, insuredValue - 1000);
+                const compBasePremium = compBaseRate + ((balanceValue / 1000) * ratePer1000Extra);
+                baseRate = compBaseRate;
+                step1BasePremium = 0.75 * compBasePremium;
+            } else if (policyType === "Pihak Ketiga") {
+                step1BasePremium = isSemenanjung ? tariff.semTp : tariff.ssTp;
+                baseRate = step1BasePremium;
+            }
+
+            step1BasePremium = Math.round((step1BasePremium + Number.EPSILON) * 100) / 100;
+            let step2Ncd = Math.round(((ncdPercent / 100) * step1BasePremium + Number.EPSILON) * 100) / 100;
+            let step3GrossPremium = Math.round((step1BasePremium - step2Ncd + Number.EPSILON) * 100) / 100;
+
+            return { baseRate, step1BasePremium, step2Ncd, step3GrossPremium };
+        }
+
+        function startGame() {
+            const nameInput = document.getElementById("player-name").value.trim();
+            const classInput = document.getElementById("player-class").value.trim();
+
+            if (!nameInput || !classInput) {
+                alert("Sila masukkan kedua-dua Nama dan Kelas anda terlebih dahulu!");
+                return;
+            }
+
+            gameState.playerName = nameInput;
+            gameState.playerClass = classInput;
+            gameState.currentQuestionIdx = 0;
+            gameState.totalScore = 0;
+            gameState.questionHistory = [];
+
+            // Calculate attempt number for this specific student
+            const allRecords = getStoredRecords();
+            const studentPrevAttempts = allRecords.filter(r => 
+                r.nama.toLowerCase() === nameInput.toLowerCase() && 
+                r.kelas.toLowerCase() === classInput.toLowerCase()
+            );
+            gameState.attemptNumber = studentPrevAttempts.length + 1;
+
+            document.getElementById("lbl-student-info").innerText = `${gameState.playerName} (${gameState.playerClass}) • Percubaan #${gameState.attemptNumber}`;
+            document.getElementById("screen-welcome").classList.add("hidden");
+            document.getElementById("screen-game").classList.remove("hidden");
+
+            updateProgressUI();
+            showLevelSelection();
+        }
+
+        function updateProgressUI() {
+            document.getElementById("lbl-question-num").innerText = `${gameState.currentQuestionIdx + 1} / 5`;
+            document.getElementById("lbl-total-score").innerText = gameState.totalScore;
+
+            const dotsContainer = document.getElementById("progress-dots");
+            dotsContainer.innerHTML = "";
+            for (let i = 0; i < 5; i++) {
+                const dot = document.createElement("div");
+                if (i < gameState.currentQuestionIdx) {
+                    dot.className = "w-3 h-3 rounded-full bg-emerald-400 border border-emerald-300";
+                } else if (i === gameState.currentQuestionIdx) {
+                    dot.className = "w-3.5 h-3.5 rounded-full bg-amber-400 animate-pulse border-2 border-white";
+                } else {
+                    dot.className = "w-3 h-3 rounded-full bg-slate-700 border border-slate-600";
+                }
+                dotsContainer.appendChild(dot);
+            }
+        }
+
+        function showLevelSelection() {
+            document.getElementById("current-q-step-text").innerText = `#${gameState.currentQuestionIdx + 1}`;
+            document.getElementById("level-selection-panel").classList.remove("hidden");
+            document.getElementById("question-workspace").classList.add("hidden");
+            document.getElementById("result-feedback-card").classList.add("hidden");
+        }
+
+        function selectLevel(level) {
+            gameState.currentLevel = level;
+            if (level === 'rendah') gameState.maxMarksForCurrent = 3;
+            else if (level === 'sederhana') gameState.maxMarksForCurrent = 5;
+            else if (level === 'power') gameState.maxMarksForCurrent = 7;
+
+            const pool = QUESTION_BANK[level];
+            const randomQ = pool[Math.floor(Math.random() * pool.length)];
+            const answers = calculateInsurance(randomQ.cc, randomQ.insuredValue, randomQ.isSemenanjung, randomQ.ncd, randomQ.policyType);
+
+            gameState.currentQuestionData = {
+                ...randomQ,
+                answers: answers,
+                level: level,
+                marks: gameState.maxMarksForCurrent
+            };
+
+            renderQuestionWorkspace();
+        }
+
+        function renderQuestionWorkspace() {
+            const q = gameState.currentQuestionData;
+
+            document.getElementById("level-selection-panel").classList.add("hidden");
+            document.getElementById("question-workspace").classList.remove("hidden");
+            document.getElementById("result-feedback-card").classList.add("hidden");
+
+            document.getElementById("ans-step1").value = "";
+            document.getElementById("ans-step2").value = "";
+            document.getElementById("ans-step3").value = "";
+
+            document.getElementById("hint-step1").classList.add("hidden");
+            document.getElementById("hint-step2").classList.add("hidden");
+            document.getElementById("hint-step3").classList.add("hidden");
+
+            document.getElementById("q-source-tag").innerText = q.source;
+            document.getElementById("q-marks-tag").innerText = `${q.marks} Markah`;
+            document.getElementById("q-title").innerText = q.title;
+            document.getElementById("q-description").innerText = q.desc;
+
+            document.getElementById("info-owner").innerText = q.owner;
+            document.getElementById("info-cc").innerText = `${q.cc} cc`;
+            document.getElementById("info-value").innerText = `RM ${q.insuredValue.toLocaleString()}`;
+            document.getElementById("info-location").innerText = q.location;
+            document.getElementById("info-ncd").innerText = `${q.ncd}%`;
+            document.getElementById("info-type").innerText = q.policyType;
+
+            document.getElementById("info-base-rate-hint").innerText = `RM ${q.answers.baseRate.toFixed(2)}`;
+
+            const fDesc = document.getElementById("formula-step1-desc");
+            if (q.policyType === "Komprehensif") {
+                fDesc.innerText = `RM${q.answers.baseRate.toFixed(2)} + [(RM${q.insuredValue} - 1000)/1000] × RM${q.isSemenanjung ? '26.00' : '20.30'}`;
+            } else if (q.policyType === "Pihak Ketiga, Kebakaran dan Kecurian") {
+                fDesc.innerText = `0.75 × [Premium Asas Komprehensif]`;
+            } else {
+                fDesc.innerText = `Terus amati kadar Kadar Pihak Ketiga dari Jadual Tarif (RM${q.answers.baseRate.toFixed(2)})`;
+            }
+        }
+
+        function toggleHint(step) {
+            const hintElem = document.getElementById(`hint-step${step}`);
+            hintElem.classList.toggle("hidden");
+        }
+
+        function submitAnswer() {
+            const userStep1 = parseFloat(document.getElementById("ans-step1").value);
+            const userStep2 = parseFloat(document.getElementById("ans-step2").value);
+            const userStep3 = parseFloat(document.getElementById("ans-step3").value);
+
+            if (isNaN(userStep1) || isNaN(userStep2) || isNaN(userStep3)) {
+                alert("Sila lengkapkan ketiga-tiga langkah pengiraan (Step 1, Step 2, & Step 3)!");
+                return;
+            }
+
+            const q = gameState.currentQuestionData;
+            const correct = q.answers;
+
+            const isStep1Correct = Math.abs(userStep1 - correct.step1BasePremium) <= 0.05;
+            const isStep2Correct = Math.abs(userStep2 - correct.step2Ncd) <= 0.05;
+            const isStep3Correct = Math.abs(userStep3 - correct.step3GrossPremium) <= 0.05;
+
+            let earnedMarks = 0;
+            const maxM = q.marks;
+
+            if (isStep1Correct && isStep2Correct && isStep3Correct) {
+                earnedMarks = maxM;
+            } else {
+                if (isStep1Correct) earnedMarks += Math.floor(maxM * 0.4);
+                if (isStep2Correct) earnedMarks += Math.floor(maxM * 0.3);
+                if (isStep3Correct) earnedMarks += Math.floor(maxM * 0.3);
+            }
+
+            gameState.totalScore += earnedMarks;
+
+            gameState.questionHistory.push({
+                set: gameState.currentQuestionIdx + 1,
+                level: q.level.toUpperCase(),
+                policyType: q.policyType,
+                earnedMarks: earnedMarks,
+                maxMarks: maxM,
+                isAllCorrect: earnedMarks === maxM
+            });
+
+            showFeedback(isStep1Correct, isStep2Correct, isStep3Correct, userStep1, userStep2, userStep3, correct, earnedMarks, maxM);
+        }
+
+        function showFeedback(s1Ok, s2Ok, s3Ok, u1, u2, u3, ans, earnedMarks, maxMarks) {
+            const feedbackCard = document.getElementById("result-feedback-card");
+            const header = document.getElementById("feedback-header");
+            const breakdown = document.getElementById("feedback-breakdown");
+
+            document.getElementById("question-workspace").classList.add("hidden");
+            feedbackCard.classList.remove("hidden");
+
+            const isPerfect = (earnedMarks === maxMarks);
+
+            if (isPerfect) {
+                confetti({ particleCount: 70, spread: 60, origin: { y: 0.6 } });
+                feedbackCard.className = "glass-panel p-6 rounded-3xl space-y-5 border-2 border-emerald-500/50 bg-emerald-950/20";
+                header.innerHTML = `
+                    <div class="w-12 h-12 bg-emerald-500/20 text-emerald-400 rounded-2xl flex items-center justify-center text-2xl font-bold border border-emerald-500/40">
+                        <i class="fa-solid fa-circle-check"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-black text-emerald-300">CEMERLANG! Jawapan Tepat Tepat Sekali</h4>
+                        <p class="text-xs text-slate-300">Anda memperoleh markah penuh: <strong class="text-amber-400">${earnedMarks} / ${maxMarks} Markah</strong></p>
+                    </div>
+                `;
+            } else {
+                feedbackCard.className = "glass-panel p-6 rounded-3xl space-y-5 border-2 border-amber-500/50 bg-amber-950/20";
+                header.innerHTML = `
+                    <div class="w-12 h-12 bg-amber-500/20 text-amber-400 rounded-2xl flex items-center justify-center text-2xl font-bold border border-amber-500/40">
+                        <i class="fa-solid fa-triangle-exclamation"></i>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-black text-amber-300">Hampir Tepat! Semak Jalan Kerja</h4>
+                        <p class="text-xs text-slate-300">Anda memperoleh markah separa: <strong class="text-amber-400">${earnedMarks} / ${maxMarks} Markah</strong></p>
+                    </div>
+                `;
+            }
+
+            breakdown.innerHTML = `
+                <div class="space-y-2">
+                    <div class="p-3 rounded-xl ${s1Ok ? 'bg-emerald-900/30 border border-emerald-700/50' : 'bg-rose-900/30 border border-rose-700/50'} text-xs">
+                        <div class="flex justify-between font-bold mb-1">
+                            <span class="${s1Ok ? 'text-emerald-300' : 'text-rose-300'}">Step 1: Premium Asas</span>
+                            <span>${s1Ok ? '<i class="fa-solid fa-check text-emerald-400"></i> Tepat' : '<i class="fa-solid fa-xmark text-rose-400"></i> Salah'}</span>
+                        </div>
+                        <p class="text-slate-300">Jawapan Anda: <strong>RM ${u1.toFixed(2)}</strong> | Sebenar: <strong class="text-emerald-300">RM ${ans.step1BasePremium.toFixed(2)}</strong></p>
+                    </div>
+                    <div class="p-3 rounded-xl ${s2Ok ? 'bg-emerald-900/30 border border-emerald-700/50' : 'bg-rose-900/30 border border-rose-700/50'} text-xs">
+                        <div class="flex justify-between font-bold mb-1">
+                            <span class="${s2Ok ? 'text-emerald-300' : 'text-rose-300'}">Step 2: Diskaun NCD</span>
+                            <span>${s2Ok ? '<i class="fa-solid fa-check text-emerald-400"></i> Tepat' : '<i class="fa-solid fa-xmark text-rose-400"></i> Salah'}</span>
+                        </div>
+                        <p class="text-slate-300">Jawapan Anda: <strong>RM ${u2.toFixed(2)}</strong> | Sebenar: <strong class="text-emerald-300">RM ${ans.step2Ncd.toFixed(2)}</strong></p>
+                    </div>
+                    <div class="p-3 rounded-xl ${s3Ok ? 'bg-emerald-900/30 border border-emerald-700/50' : 'bg-rose-900/30 border border-rose-700/50'} text-xs">
+                        <div class="flex justify-between font-bold mb-1">
+                            <span class="${s3Ok ? 'text-emerald-300' : 'text-rose-300'}">Step 3: Premium Kasar Akhir</span>
+                            <span>${s3Ok ? '<i class="fa-solid fa-check text-emerald-400"></i> Tepat' : '<i class="fa-solid fa-xmark text-rose-400"></i> Salah'}</span>
+                        </div>
+                        <p class="text-slate-300">Jawapan Anda: <strong>RM ${u3.toFixed(2)}</strong> | Sebenar: <strong class="text-emerald-300">RM ${ans.step3GrossPremium.toFixed(2)}</strong></p>
+                    </div>
+                </div>
+            `;
+        }
+
+        function nextQuestion() {
+            gameState.currentQuestionIdx++;
+            if (gameState.currentQuestionIdx >= 5) {
+                showFinalResults();
+            } else {
+                updateProgressUI();
+                showLevelSelection();
+            }
+        }
+
+        function showFinalResults() {
+            document.getElementById("screen-game").classList.add("hidden");
+            document.getElementById("screen-results").classList.remove("hidden");
+
+            const maxPotentialScore = gameState.questionHistory.reduce((acc, curr) => acc + curr.maxMarks, 0);
+            const percentage = Math.round((gameState.totalScore / maxPotentialScore) * 100);
+
+            document.getElementById("final-score-display").innerText = `${gameState.totalScore} / ${maxPotentialScore}`;
+            document.getElementById("summary-student-name").innerText = gameState.playerName;
+            document.getElementById("summary-student-class").innerText = `Kelas: ${gameState.playerClass} • Percubaan #${gameState.attemptNumber}`;
+
+            let gradeTitle = "GRED A+";
+            const badgeElem = document.getElementById("final-grade-badge");
+            if (percentage >= 85) {
+                gradeTitle = "PAKAR UTAMA (A+)";
+                badgeElem.className = "text-xs font-extrabold text-amber-300";
+                badgeElem.innerText = `🏆 ${gradeTitle} (${percentage}%)`;
+                confetti({ particleCount: 150, spread: 90, origin: { y: 0.5 } });
+            } else if (percentage >= 65) {
+                gradeTitle = "CEMERLANG (A)";
+                badgeElem.className = "text-xs font-extrabold text-emerald-300";
+                badgeElem.innerText = `🌟 ${gradeTitle} (${percentage}%)`;
+            } else if (percentage >= 40) {
+                gradeTitle = "LULUS (B/C)";
+                badgeElem.className = "text-xs font-extrabold text-sky-300";
+                badgeElem.innerText = `👍 ${gradeTitle} (${percentage}%)`;
+            } else {
+                gradeTitle = "PERLU LATIHAN (D/E)";
+                badgeElem.className = "text-xs font-extrabold text-rose-300";
+                badgeElem.innerText = `💪 ${gradeTitle} (${percentage}%)`;
+            }
+
+            // Create record object
+            const now = new Date();
+            const dateStr = `${now.getDate()}/${now.getMonth()+1}/${now.getFullYear()} ${now.getHours().toString().padStart(2,'0')}:${now.getMinutes().toString().padStart(2,'0')}`;
+            
+            const newRecord = {
+                nama: gameState.playerName,
+                kelas: gameState.playerClass,
+                cubaan: gameState.attemptNumber,
+                markah: gameState.totalScore,
+                markahMaksimum: maxPotentialScore,
+                peratus: percentage,
+                gred: gradeTitle,
+                tarikh: dateStr
+            };
+
+            // Save to local storage
+            saveRecordLocally(newRecord);
+
+            // Sync with Google Sheets
+            syncToGoogleSheets(newRecord);
+
+            // Render Leaderboard & Analytics Charts
+            renderAllRecordsTable();
+            renderProgressionChart();
+            renderDistributionChart();
+        }
+
+        function syncToGoogleSheets(record) {
+            const statusElem = document.getElementById("sheet-sync-status");
+            const scriptUrl = localStorage.getItem("spm_sheets_url") || DEFAULT_SHEETS_URL;
+
+            if (!scriptUrl) {
+                statusElem.className = "text-xs font-bold text-amber-400 flex items-center justify-center gap-1.5 pt-1";
+                statusElem.innerHTML = `<i class="fa-solid fa-circle-exclamation"></i> Belum Dihubung ke Sheets`;
+                return;
+            }
+
+            statusElem.className = "text-xs font-bold text-sky-400 flex items-center justify-center gap-1.5 pt-1 animate-pulse";
+            statusElem.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Menghantar ke Google Sheet...`;
+
+            fetch(scriptUrl, {
+                method: "POST",
+                mode: "no-cors", // Standard cross-origin for Google Apps Script
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(record)
+            })
+            .then(() => {
+                statusElem.className = "text-xs font-bold text-emerald-400 flex items-center justify-center gap-1.5 pt-1";
+                statusElem.innerHTML = `<i class="fa-solid fa-circle-check"></i> Berjaya Disimpan ke Google Sheet`;
+            })
+            .catch(err => {
+                console.error("Sheets Error:", err);
+                statusElem.className = "text-xs font-bold text-rose-400 flex items-center justify-center gap-1.5 pt-1";
+                statusElem.innerHTML = `<i class="fa-solid fa-circle-xmark"></i> Ralat Penghantaran`;
+            });
+        }
+
+        function renderAllRecordsTable() {
+            const records = getStoredRecords();
+            const tbody = document.getElementById("all-records-table-body");
+            tbody.innerHTML = "";
+
+            if (records.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-500">Tiada rekod tersimpan lagi.</td></tr>`;
+                return;
+            }
+
+            records.forEach((r, idx) => {
+                const tr = document.createElement("tr");
+                tr.className = "hover:bg-slate-800/50 transition";
+                tr.innerHTML = `
+                    <td class="p-2.5 font-bold text-slate-400">${idx + 1}</td>
+                    <td class="p-2.5 font-bold text-white">${r.nama}</td>
+                    <td class="p-2.5 text-indigo-300 font-semibold">${r.kelas}</td>
+                    <td class="p-2.5 text-slate-300 font-mono">Percubaan #${r.cubaan}</td>
+                    <td class="p-2.5 font-bold text-amber-400">${r.markah} / ${r.markahMaksimum}</td>
+                    <td class="p-2.5 font-bold ${r.peratus >= 65 ? 'text-emerald-400' : 'text-sky-300'}">${r.peratus}%</td>
+                    <td class="p-2.5 text-[11px] text-slate-400">${r.tarikh}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function renderProgressionChart() {
+            const ctx = document.getElementById("studentProgressionChart").getContext("2d");
+            if (chartInstances.progression) chartInstances.progression.destroy();
+
+            const records = getStoredRecords();
+            // Filter records for current student sorted chronologically
+            const studentRecords = records
+                .filter(r => r.nama.toLowerCase() === gameState.playerName.toLowerCase() && r.kelas.toLowerCase() === gameState.playerClass.toLowerCase())
+                .reverse();
+
+            const labels = studentRecords.map(r => `Cubaan #${r.cubaan}`);
+            const dataScores = studentRecords.map(r => r.peratus);
+
+            chartInstances.progression = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Peratus Markah (%)',
+                        data: dataScores,
+                        borderColor: '#6366f1',
+                        backgroundColor: 'rgba(99, 102, 241, 0.2)',
+                        fill: true,
+                        tension: 0.3,
+                        pointBackgroundColor: '#ec4899',
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: { min: 0, max: 100, ticks: { color: '#94a3b8' }, grid: { color: 'rgba(255,255,255,0.05)' } },
+                        x: { ticks: { color: '#94a3b8' }, grid: { display: false } }
+                    },
+                    plugins: {
+                        legend: { labels: { color: '#f8fafc', font: { family: 'Plus Jakarta Sans' } } }
+                    }
+                }
+            });
+        }
+
+        function renderDistributionChart() {
+            const ctx = document.getElementById("classDistributionChart").getContext("2d");
+            if (chartInstances.distribution) chartInstances.distribution.destroy();
+
+            const records = getStoredRecords();
+            let gredCounts = { "Pakar (A+)": 0, "Cemerlang (A)": 0, "Lulus (B/C)": 0, "Perlu Latihan": 0 };
+
+            records.forEach(r => {
+                if (r.peratus >= 85) gredCounts["Pakar (A+)"]++;
+                else if (r.peratus >= 65) gredCounts["Cemerlang (A)"]++;
+                else if (r.peratus >= 40) gredCounts["Lulus (B/C)"]++;
+                else gredCounts["Perlu Latihan"]++;
+            });
+
+            chartInstances.distribution = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(gredCounts),
+                    datasets: [{
+                        data: Object.values(gredCounts),
+                        backgroundColor: ['#f59e0b', '#10b981', '#3b82f6', '#f43f5e'],
+                        borderWidth: 2,
+                        borderColor: '#0f172a'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'bottom', labels: { color: '#f8fafc', boxWidth: 12, font: { size: 11, family: 'Plus Jakarta Sans' } } }
+                    }
+                }
+            });
+        }
+
+        function clearLocalRecords() {
+            if (confirm("Adakah anda pasti ingin memadam semua rekod markah di komputer/telefon ini?")) {
+                localStorage.removeItem("spm_insurans_all_records");
+                renderAllRecordsTable();
+                renderDistributionChart();
+                updateQuickHistoryUI();
+            }
+        }
+
+        function restartGame() {
+            document.getElementById("screen-results").classList.add("hidden");
+            document.getElementById("screen-welcome").classList.remove("hidden");
+            updateQuickHistoryUI();
+        }
+
+        /* MODAL CONTROLLERS */
+        function openTariffModal() { document.getElementById("tariff-modal").classList.remove("hidden"); }
+        function closeTariffModal() { document.getElementById("tariff-modal").classList.add("hidden"); }
+
+        function openFormulaModal() { document.getElementById("formula-modal").classList.remove("hidden"); }
+        function closeFormulaModal() { document.getElementById("formula-modal").classList.add("hidden"); }
+
+        function openSheetsConfigModal() { document.getElementById("sheets-modal").classList.remove("hidden"); }
+        function closeSheetsConfigModal() { document.getElementById("sheets-modal").classList.add("hidden"); }
+
+        function saveSheetsUrl() {
+            const url = document.getElementById("sheets-web-url").value.trim();
+            if (url) {
+                localStorage.setItem("spm_sheets_url", url);
+                alert("URL Google Sheets berjaya disimpan!");
+                closeSheetsConfigModal();
+            } else {
+                alert("Sila masukkan URL Web App Google Apps Script yang sah!");
+            }
+        }
+
+        function copyAppsScript() {
+            const codeText = document.getElementById("script-code-block").innerText;
+            const textInput = document.createElement("textarea");
+            textInput.value = codeText;
+            document.body.appendChild(textInput);
+            textInput.select();
+            document.execCommand('copy');
+            document.body.removeChild(textInput);
+            alert("Kod Google Apps Script berjaya disalin!");
+        }
+    </script>
+</body>
+</html>
